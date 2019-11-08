@@ -14,8 +14,8 @@ where `baseURl` is your server
 client := sdk.NewClient(nil, conf)
 ```
 where the func `NewClient` takes two params:
-- http.Client
-- Config
+- httpClient (*http.Client)
+- conf (*Config) - previously created configs
 
 If http.Client is nil func `NewClient` returned `DefaultClient`.
 
@@ -26,7 +26,7 @@ if err != nil {
     log.Fatalf("NewAccountFromPrivateKey finished with err: %s", err)
 }
 ```
-where func `NewAccountFromPrivateKey takes` takes param `privateKey` - private key of future account
+where func `NewAccountFromPrivateKey takes` takes param `privateKey` - private key of future account.
 
 Before creating new mosaic you need publish it definition to the newtwork using:
 ```go
@@ -81,8 +81,8 @@ func announceTransaction(client *sdk.Client, transaction *sdk.SignedTransaction)
 }
 ```
 where func `announceTransaction` takes next params:
-- client (Client struct) - created early client
-- transaction (SignedTransaction struct) - signed early transaction
+- client (Client struct) - previously created client
+- transaction (SignedTransaction struct) - previously signed transaction.
 
 Creating new mosaic in the network takes 15s.
 
@@ -95,7 +95,7 @@ if err != nil {
 ```
 where func `NewMosaic` takes next params:
 - assetId (AssetId struct) - blockchain identifier
-- amount (Amount struct) - amount of blocks
+- amount (Amount struct) - amount of blocks.
 
 And create new transfer transaction:
 ```go
@@ -113,7 +113,7 @@ where `NewTransferTransaction` takes next params:
 - deadline (Timestamp) - maximum time for including the transaction in blockchain;
 - recipient (*Address) - address of recipient
 - mosaics ([]*Mosaic) - array of mosaics to transfer
-- message (Message interface) - attached message to the transaction (max size 1024 characters)
+- message (Message interface) - attached message to the transaction (max size 1024 characters).
 
 and where `account2` is:
 ```go
