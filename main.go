@@ -12,7 +12,7 @@ import (
 
 const (
 	baseURL    = "http://localhost:3000"
-	privateKey = "EFFEE8FB10A0141C38643566C86C0401FC38F3A768D409272F5F5368BB1A2B25"
+	privateKey = "28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78"
 )
 
 func main() {
@@ -47,13 +47,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	err = announceTransaction(client, signedMosaicDefinitionTransaction)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	time.Sleep(time.Second * 20)
+	fmt.Println(client.Mosaic.GetMosaicInfo(context.Background(), mosaicDefinitionTransaction.MosaicId))
 
 	account2, err := client.NewAccount()
 	if err != nil {
@@ -84,12 +84,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("Mosaic: %s\n", mosaic.String())
-	fmt.Printf("Mosaic defenition: %s\n", signedMosaicDefinitionTransaction.String())
-	fmt.Printf("Transfer: %s\n", signedTransferTransaction.String())
-	fmt.Printf("Account1: %s\n", account1.String())
-	fmt.Printf("Account2: %s\n", account2.String())
 
 	fmt.Println(client.Account.GetAccountInfo(context.Background(), account2.Address))
 }
