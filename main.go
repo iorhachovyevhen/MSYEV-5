@@ -59,6 +59,9 @@ func main() {
 	}
 
 	mosaic, err := sdk.NewMosaic(mosaicDefinitionTransaction.MosaicId, 1)
+	if err != nil {
+		log.Fatalf("NewMosaic finished with err: %s", err)
+	}
 
 	transferTransaction, err := client.NewTransferTransaction(
 		sdk.NewDeadline(time.Hour*1),
