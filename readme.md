@@ -2,18 +2,20 @@ Goal: create new mosaic and transfer it from one newly account to another.
 
 Before creating new account create:
     - new confing (use NewConfig(params)):
-        conf, err := sdk.NewConfig(context.Background(), []string{baseURL})
-        if err != nil {
-            log.Fatalf("sdk.NewConfig finished with error: %s\n", err)
-        }
+    ```
+       conf, err := sdk.NewConfig(context.Background(), []string{baseURL})
+       if err != nil {
+           log.Fatalf("sdk.NewConfig finished with error: %s\n", err)
+       }
+    ```
     - new client:
-        client := sdk.NewClient(nil, conf)
+>        `client := sdk.NewClient(nil, conf)`
 
 After config and client have been created create first new account:
 >   `account1, err := client.NewAccountFromPrivateKey(privateKey)
->	if err != nil {
->		log.Fatalf("NewAccountFromPrivateKey finished with err: %s", err)
->	}`
+	if err != nil {
+		log.Fatalf("NewAccountFromPrivateKey finished with err: %s", err)
+	}`
 
 Before creating new mosaic you need publish it definition to the newtwork using:
 >    mosaicDefinitionTransaction, err := client.NewMosaicDefinitionTransaction(
