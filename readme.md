@@ -1,4 +1,4 @@
-Goal: create new mosaic and transfer it from one newly account to another.
+**Goal**: create new mosaic and transfer it from one newly account to another.
 
 Before creating new account create:
 - new confing:
