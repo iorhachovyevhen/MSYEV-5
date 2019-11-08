@@ -48,7 +48,7 @@ if err != nil {
 where `NewMosaicDefinitionTransaction` takes next params:
 - deadline (Timestamp) - maximum time for including the transaction in blockchain;
 - nonce (uint32) - TODO;
-- ownerPublicKey - Public key of public account, that create mosaic definition transaction;
+- ownerPublicKey - public key of public account, that create mosaic definition transaction;
 - mosaicProps - creating new mosaic properties using func `NewMosaicProperties` with next params:
     - supplyMutable (bool) - determines whether the creator is allowed in future to decrease the supply within the limits of mosaics owned or it a immutable supply.
     - transferable (bool) - determines whether the mosaic can be transferred in other accounts or only the creator can be recepient after first the first transfer.
@@ -94,14 +94,14 @@ if err != nil {
 }
 ```
 where func `NewMosaic` takes next params:
-- assetId (AssetId struc) - blockchain identifier
+- assetId (AssetId struct) - blockchain identifier
 - amount (Amount struct) - amount of blocks
 
 And create new transfer transaction:
 ```go
 transferTransaction, err := client.NewTransferTransaction(
     sdk.NewDeadline(time.Hour*1), // deadline
-    account2.Address,             // address
+    account2.Address,             // recipient
     []*sdk.Mosaic{mosaic},        // mosaics
     sdk.NewPlainMessage("empty"), // message
 )
@@ -111,7 +111,7 @@ if err != nil {
 ```
 where `NewTransferTransaction` takes next params:
 - deadline (Timestamp) - maximum time for including the transaction in blockchain;
-- address - address of recipient
+- recipient (*Address) - address of recipient
 - mosaics ([]*Mosaic) - array of mosaics to transfer
 - message (Message interface) - attached message to the transaction (max size 1024 characters)
 
