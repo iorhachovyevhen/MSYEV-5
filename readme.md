@@ -1,7 +1,7 @@
 Goal: create new mosaic and transfer it from one newly account to another.
 
 Before creating new account create:
-- new confing (use NewConfig(params)):
+- new confing:
 ```go
 conf, err := sdk.NewConfig(context.Background(), []string{baseURL})
 if err != nil {
