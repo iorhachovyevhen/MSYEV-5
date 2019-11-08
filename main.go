@@ -58,12 +58,7 @@ func main() {
 		log.Fatalf("NewAccount finished with err: %s", err)
 	}
 
-	mosaicInfo, err := client.Mosaic.GetMosaicInfo(context.Background(), mosaicDefinitionTransaction.MosaicId)
-	if err != nil {
-		log.Fatalf("Mosaic.GetMosaicInfo finished with err: %s", err)
-	}
-
-	mosaic, err := sdk.NewMosaic(mosaicInfo.MosaicId, mosaicInfo.Supply)
+	mosaic, err := sdk.NewMosaic(mosaicDefinitionTransaction.MosaicId, 1)
 
 	transferTransaction, err := client.NewTransferTransaction(
 		sdk.NewDeadline(time.Hour*1),
@@ -72,7 +67,7 @@ func main() {
 		sdk.NewPlainMessage("empty"),
 	)
 	if err != nil {
-		log.Printf("NewTransferTransaction finished with err: %s", err)
+		log.Fatalf("NewTransferTransaction finished with err: %s", err)
 	}
 
 	signedTransferTransaction, err := signTransaction(account1, transferTransaction)
