@@ -26,7 +26,7 @@ if err != nil {
     log.Fatalf("NewAccountFromPrivateKey finished with err: %s", err)
 }
 ```
-where func `NewAccountFromPrivateKey takes` takes param `privateKey` - private key of future mosaic owner
+where func `NewAccountFromPrivateKey takes` takes param `privateKey` - private key of future account
 
 Before creating new mosaic you need publish it definition to the newtwork using:
 ```go
