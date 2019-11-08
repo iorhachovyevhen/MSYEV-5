@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -15,7 +16,6 @@ const (
 )
 
 func main() {
-	// client := createNewClient()
 	conf, err := sdk.NewConfig(context.Background(), []string{baseURL})
 	if err != nil {
 		log.Fatalf("sdk.NewConfig finished with error: %s\n", err)
@@ -43,13 +43,14 @@ func main() {
 		log.Fatalf("NewMosaicDefinitionTransaction finished with err : %s", err)
 	}
 
-	signedMosaicDefinitionTransaction, err := account1.Sign(mosaicDefinitionTransaction)
+	signedMosaicDefinitionTransaction, err := signTransaction(account1, mosaicDefinitionTransaction)
 	if err != nil {
-		log.Fatalf("Sign finished with err: %s", err)
+		log.Fatal(err)
 	}
-	_, err = client.Transaction.Announce(context.Background(), signedMosaicDefinitionTransaction)
+
+	err = announceTransaction(client, signedMosaicDefinitionTransaction)
 	if err != nil {
-		log.Fatalf("Transaction.Announce finished with err: %s", err)
+		log.Fatal(err)
 	}
 
 	account2, err := client.NewAccount()
@@ -57,24 +58,49 @@ func main() {
 		log.Fatalf("NewAccount finished with err: %s", err)
 	}
 
+	mosaicInfo, err := client.Mosaic.GetMosaicInfo(context.Background(), mosaicDefinitionTransaction.MosaicId)
+	if err != nil {
+		log.Fatalf("Mosaic.GetMosaicInfo finished with err: %s", err)
+	}
+
+	mosaic, err := sdk.NewMosaic(mosaicInfo.MosaicId, mosaicInfo.Supply)
+
 	transferTransaction, err := client.NewTransferTransaction(
 		sdk.NewDeadline(time.Hour*1),
-		sdk.NewAddress(account2.Address.Address, client.NetworkType()),
-		[]*sdk.Mosaic{sdk.Xpx(10000000)},
+		account2.Address,
+		[]*sdk.Mosaic{mosaic},
 		sdk.NewPlainMessage("empty"),
 	)
 	if err != nil {
 		log.Printf("NewTransferTransaction finished with err: %s", err)
 	}
 
-	signedTransferTransaction, err := account2.Sign(transferTransaction)
+	signedTransferTransaction, err := signTransaction(account1, transferTransaction)
 	if err != nil {
-		log.Fatalf("Sign finished with err: %s", err)
+		log.Fatal(err)
 	}
-	_, err = client.Transaction.Announce(context.Background(), signedTransferTransaction)
+
+	err = announceTransaction(client, signedTransferTransaction)
 	if err != nil {
-		log.Fatalf("Transaction.Announce finished with err: %s", err)
+		log.Fatal(err)
 	}
+}
+
+func signTransaction(account *sdk.Account, transaction sdk.Transaction) (*sdk.SignedTransaction, error) {
+	signedTransaction, err := account.Sign(transaction)
+	if err != nil {
+		err = fmt.Errorf("Sign finished with err: %s", err)
+		return nil, err
+	}
+	return signedTransaction, nil
+}
+
+func announceTransaction(client *sdk.Client, transaction *sdk.SignedTransaction) error {
+	_, err := client.Transaction.Announce(context.Background(), transaction)
+	if err != nil {
+		return fmt.Errorf("Transaction.Announce finished with err: %s", err)
+	}
+	return nil
 }
 
 func generateNonce() (nonce uint32) {
