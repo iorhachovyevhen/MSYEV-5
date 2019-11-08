@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	baseURL    = "http://localhost:8000"
-	privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+	baseURL    = "http://localhost:3000"
+	privateKey = "EFFEE8FB10A0141C38643566C86C0401FC38F3A768D409272F5F5368BB1A2B25"
 )
 
 func main() {
@@ -53,6 +53,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	time.Sleep(time.Second * 20)
+
 	account2, err := client.NewAccount()
 	if err != nil {
 		log.Fatalf("NewAccount finished with err: %s", err)
@@ -82,6 +84,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Printf("Mosaic: %s\n", mosaic.String())
+	fmt.Printf("Mosaic defenition: %s\n", signedMosaicDefinitionTransaction.String())
+	fmt.Printf("Transfer: %s\n", signedTransferTransaction.String())
+	fmt.Printf("Account1: %s\n", account1.String())
+	fmt.Printf("Account2: %s\n", account2.String())
+
+	fmt.Println(client.Account.GetAccountInfo(context.Background(), account2.Address))
 }
 
 func signTransaction(account *sdk.Account, transaction sdk.Transaction) (*sdk.SignedTransaction, error) {
